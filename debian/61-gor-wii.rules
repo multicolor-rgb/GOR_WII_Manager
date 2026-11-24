@@ -1,0 +1,3 @@
+# GOR Wii Manager: rozpoznawanie partycji WBFS.
+# libblkid nie zna tego formatu, więc sprawdzamy magiczny nagłówek sami.
+SUBSYSTEM=="block", ENV{DEVTYPE}=="partition", ENV{ID_FS_TYPE}=="", IMPORT{program}="/usr/lib/gor-wii-manager/wbfs-probe $devnode"

@@ -1,0 +1,46 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            python3 python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 \
+            python3-cryptography libzstd1
+
+      - name: Run unit tests
+        run: make test
+
+      - name: Byte-compile the package
+        run: python3 -m compileall -q src
+
+  package:
+    runs-on: ubuntu-24.04
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends debhelper
+
+      - name: Build .deb
+        run: make deb
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: gor-wii-manager-deb
+          path: dist/*.deb
+          if-no-files-found: error

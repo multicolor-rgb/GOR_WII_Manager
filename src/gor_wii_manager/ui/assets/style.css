@@ -1,0 +1,44 @@
+/* GOR Wii Manager — drobne uzupełnienia motywu */
+
+.sidebar-panel {
+  background-color: alpha(currentColor, 0.035);
+}
+
+.sidebar-heading {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  margin: 16px 14px 6px 14px;
+  opacity: 0.55;
+}
+
+.navigation-sidebar row {
+  border-radius: 8px;
+  margin: 1px 6px;
+}
+
+.navigation-sidebar row:selected {
+  background-color: alpha(currentColor, 0.12);
+}
+
+.game-cover {
+  border-radius: 5px;
+  background-color: alpha(currentColor, 0.07);
+}
+
+.queue-panel {
+  border-top: 1px solid alpha(currentColor, 0.14);
+  background-color: alpha(currentColor, 0.025);
+}
+
+columnview.data-table > listview > row {
+  min-height: 58px;
+}
+
+.summary-label {
+  opacity: 0.65;
+}
+
+.caption.dim-label {
+  font-size: 0.82rem;
+}

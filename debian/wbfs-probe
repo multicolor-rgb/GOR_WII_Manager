@@ -1,0 +1,34 @@
+#!/usr/bin/python3
+"""udev helper: recognize a WBFS container (libblkid does not).
+
+Prints udev environment keys when the first sector starts with the WBFS
+magic. Used by 61-wbfs.rules so that lsblk/UDisks2 expose WBFS partitions
+with ID_FS_TYPE=wbfs.
+"""
+
+import os
+import sys
+
+
+def main(argv: list[str]) -> int:
+    if len(argv) < 2:
+        return 0
+    try:
+        fd = os.open(argv[1], os.O_RDONLY | os.O_CLOEXEC)
+    except OSError:
+        return 0
+    try:
+        head = os.pread(fd, 512, 0)
+    except OSError:
+        head = b""
+    finally:
+        os.close(fd)
+    if len(head) >= 12 and head[:4] == b"WBFS":
+        print("ID_FS_TYPE=wbfs")
+        print("ID_FS_USAGE=filesystem")
+        print("ID_FS_VERSION=1")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv))

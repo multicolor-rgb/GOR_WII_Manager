@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.gor.GorWiiManager</id>
+  <name>GOR Wii Manager</name>
+  <summary>Manage Wii and GameCube game backups (WBFS)</summary>
+  <summary xml:lang="pl">Zarządzaj kopiami gier Wii i GameCube (WBFS)</summary>
+  <developer id="io.github.gor">
+    <name>GOR Wii Manager</name>
+  </developer>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0-or-later</project_license>
+  <description>
+    <p>
+      Natywna aplikacja dla Linuksa do zarządzania kopiami gier Wii i GameCube
+      w partycjach i plikach WBFS. Pozwala tworzyć i formatować napędy,
+      importować obrazy ISO/GCM z czyszczeniem zbędnych danych, wypakowywać
+      gry z powrotem do ISO lub dzielonych plików WBFS, kopiować gry między
+      napędami oraz sprawdzać i naprawiać tablicę wolnych bloków.
+    </p>
+    <p>
+      Obsługiwane są również skompresowane obrazy RVZ (Dolphin) — czytane
+      natywnie, bez zewnętrznych programów, z możliwością importu na napęd
+      WBFS lub konwersji do ISO i pojedynczego pliku .wbfs.
+    </p>
+    <p>
+      Biblioteka folderowa na dysku USB jest obsługiwana jak normalny napęd:
+      można ją otworzyć, dodawać do niej gry jako osobne pliki
+      wbfs/Tytuł [ID]/ID.wbfs (z podziałem .wbf1 na FAT32), kopiować gry
+      w obie strony, usuwać je oraz korzystać z Nintendont
+      (games/Tytuł [ID]/game.iso) dla GameCube.
+    </p>
+    <p>
+      Tytuły gier i okładki są pobierane z bazy GameTDB/WiiTDB i przechowywane
+      w lokalnym cache, więc aplikacja działa również offline.
+    </p>
+    <ul>
+      <li>Obsługa Wii i GameCube, obrazów ISO, GCM i WBFS</li>
+      <li>Pliki dzielone .wbfs/.wbf1 zgodne z FAT32</li>
+      <li>Kolejka zadań z postępem, prędkością i anulowaniem</li>
+      <li>Weryfikacja i naprawa struktury WBFS</li>
+    </ul>
+  </description>
+  <launchable type="desktop-id">io.github.gor.GorWiiManager.desktop</launchable>
+  <provides>
+    <binary>gor-wii-manager</binary>
+  </provides>
+  <categories>
+    <category>Utility</category>
+    <category>Game</category>
+  </categories>
+  <url type="homepage">https://multicolor-rgb.github.io/GOR_WII_Manager/</url>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="0.6.0" date="2026-11-24"/>
+  </releases>
+</component>

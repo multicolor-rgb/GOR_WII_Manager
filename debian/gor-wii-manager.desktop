@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=GOR Wii Manager
+GenericName=WBFS Backup Manager
+Comment=Zarządzaj kopiami gier Wii i GameCube na WBFS
+Exec=gor-wii-manager %f
+Icon=io.github.gor.GorWiiManager
+Terminal=false
+Type=Application
+Categories=Utility;
+Keywords=wii;gamecube;wbfs;iso;backup;kopia;
+StartupNotify=true

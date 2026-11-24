@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+debian/.debhelper/
+debian/debhelper-build-stamp
+debian/files
+debian/gor-wii-manager/
+debian/*.substvars
+../gor-wii-manager_*.deb
+../gor-wii-manager_*.buildinfo
+../gor-wii-manager_*.changes

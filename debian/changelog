@@ -1,0 +1,63 @@
+gor-wii-manager (0.6.0) unstable; urgency=medium
+
+  * Dwujęzyczny interfejs: angielski domyślnie, polski do wyboru w
+    Ustawieniach → Język interfejsu (zmiana natychmiastowa).
+  * Dodano stronę projektu GitHub Pages i aktualne adresy repozytorium.
+  * Zaktualizowano metadane AppStream i pakietu.
+
+ -- GOR Wii Manager <wbfs@example.invalid>  Tue, 24 Nov 2026 21:34:10 +0100
+
+gor-wii-manager (0.5.2) unstable; urgency=medium
+
+  * Kopiowanie gier WBFS zachowuje istniejącą mapę bloków (368 MB pozostaje
+    368 MB zamiast rozdymania do pełnej partycji gry).
+  * Poprawione szacowanie wolnego miejsca dla źródeł WBFS i plików .wbfs.
+  * Dodane testy regresyjne dla klonowania gier i szacowania rozmiaru.
+
+ -- GOR Wii Manager <wbfs@example.invalid>  Tue, 24 Nov 2026 21:09:48 +0100
+
+gor-wii-manager (0.5.1) unstable; urgency=medium
+
+  * Naprawiono przyciski GUI (akcje wymagały prefiksu win.*).
+  * Naprawiono RVZ Wii z pakowaniem padding-u po listach wyjątków.
+  * Dodano testy regresyjne dla akcji GUI i pakowanych grup RVZ.
+
+ -- GOR Wii Manager <wbfs@example.invalid>  Tue, 24 Nov 2026 20:44:56 +0100
+
+gor-wii-manager (0.5.0) unstable; urgency=medium
+
+  * Biblioteka folderowa USB jako pełnoprawny napęd w aplikacji.
+  * Otwieranie/nowa biblioteka, lista gier, okładki i rozmiary.
+  * Dodawanie ISO/GCM/RVZ bezpośrednio jako osobne pliki .wbfs.
+  * Kopiowanie WBFS ↔ biblioteka ↔ biblioteka, usuwanie gier.
+  * Automatyczne wykrywanie zamontowanych bibliotek USB.
+
+ -- GOR Wii Manager <wbfs@example.invalid>  Tue, 24 Nov 2026 19:54:57 +0100
+
+gor-wii-manager (0.4.0) unstable; urgency=medium
+
+  * Eksport gier do biblioteki folderowej na USB (USB Loader GX/WiiFlow/CFG).
+  * Układ wbfs/<Tytuł> [ID]/<ID>.wbfs z podziałem .wbf1 na FAT32.
+  * Profil Nintendont: games/<Tytuł> [ID]/game.iso dla GameCube.
+  * Synchronizacja całej biblioteki, eksport plików ISO/GCM/RVZ.
+  * Atomowy zapis, wykrywanie duplikatów, domyślne nadpisywanie.
+
+ -- GOR Wii Manager <wbfs@example.invalid>  Tue, 24 Nov 2026 19:18:14 +0100
+
+gor-wii-manager (0.3.0) unstable; urgency=medium
+
+  * Natywny czytnik RVZ (Dolphin): import do WBFS, konwersja do ISO i .wbfs.
+  * Obsługa Zstandard, LZMA, LZMA2, BZip2, NONE oraz pakowania padding-u RVZ.
+  * Rekonstrukcja Wii: H0/H1/H2, wyjątki hash, AES-128-CBC.
+  * Nowa akcja konwersji RVZ/ISO w GUI oraz polecenie convert w CLI.
+
+ -- GOR Wii Manager <wbfs@example.invalid>  Tue, 24 Nov 2026 18:34:30 +0100
+
+gor-wii-manager (0.2.0) unstable; urgency=medium
+
+  * Rebranding projektu na GOR Wii Manager.
+  * Nowa nazwa paczki, modułu Pythona, aplikacji i poleceń.
+  * Automatyczna migracja ustawień, bazy tytułów i okładek.
+  * Przejściowy symlink polecenia wbfs-manager.
+
+ -- GOR Wii Manager <wbfs@example.invalid>  Tue, 24 Nov 2026 17:44:38 +0100

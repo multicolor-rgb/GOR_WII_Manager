@@ -1,0 +1,26 @@
+Source: gor-wii-manager
+Section: utils
+Priority: optional
+Maintainer: GOR Wii Manager <wbfs@example.invalid>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+Homepage: https://multicolor-rgb.github.io/GOR_WII_Manager/
+
+Package: gor-wii-manager
+Architecture: all
+Depends: python3 (>= 3.10), python3-gi, gir1.2-gtk-4.0, gir1.2-adw-1,
+ python3-cryptography, libzstd1, pkexec | policykit-1, udisks2
+Conflicts: wbfs-manager (<< 0.3.0)
+Replaces: wbfs-manager (<< 0.3.0)
+Description: manager of Wii and GameCube backups (WBFS) for Linux
+ A native GTK4/libadwaita application for managing Wii and GameCube
+ game backups stored in WBFS partitions or .wbfs files. It can format
+ WBFS volumes, import ISO/GCM and compressed RVZ images with scrubbing,
+ extract games back to ISO or split WBFS files, copy games between drives,
+ verify and repair the free-block table, and show covers and titles from
+ GameTDB. RVZ files are decoded natively (Zstd/LZMA/BZip2 and Wii hash
+ reconstruction), without requiring Dolphin. Games can also be exported
+ into USB loader folder libraries (USB Loader GX/WiiFlow/CFG) with proper
+ wbfs/<Title> [<ID>]/<ID>.wbfs layout, optional FAT32 splitting, and
+ Nintendont games/<Title> [<ID>]/game.iso for GameCube.

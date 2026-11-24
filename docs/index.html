@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GOR Wii Manager — Wii &amp; GameCube backups on Linux</title>
+  <meta name="description" content="A native GTK4/Libadwaita manager for Wii and GameCube game backups: WBFS drives, USB Loader GX folder libraries and native RVZ import on Linux.">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./">
+      <img src="icon.svg" alt="" width="34" height="34">
+      <span>GOR Wii Manager</span>
+    </a>
+    <nav>
+      <a href="#features" data-en="Features" data-pl="Funkcje">Features</a>
+      <a href="#screens" data-en="Screenshots" data-pl="Zrzuty ekranu">Screenshots</a>
+      <a href="#install" data-en="Install" data-pl="Instalacja">Install</a>
+      <a href="https://github.com/multicolor-rgb/GOR_WII_Manager" rel="noopener">GitHub</a>
+      <button id="lang-toggle" class="lang-toggle" type="button" aria-label="Switch language">Polski</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-text">
+        <span class="badge" data-en="Version 0.6.0 · GPL-2.0" data-pl="Wersja 0.6.0 · GPL-2.0">Version 0.6.0 · GPL-2.0</span>
+        <h1>GOR Wii Manager</h1>
+        <p class="tagline"
+           data-en="A native Linux manager for Wii and GameCube game backups. WBFS drives, USB Loader GX folder libraries and RVZ import — without Wine or Dolphin."
+           data-pl="Natywny menedżer kopii gier Wii i GameCube dla Linuksa. Napędy WBFS, biblioteki USB Loader GX i import RVZ — bez Wine i bez Dolphin.">
+          A native Linux manager for Wii and GameCube game backups. WBFS drives,
+          USB Loader GX folder libraries and RVZ import — without Wine or Dolphin.
+        </p>
+        <div class="cta">
+          <a class="button primary" href="https://github.com/multicolor-rgb/GOR_WII_Manager/releases/latest"
+             data-en="Download .deb" data-pl="Pobierz .deb">Download .deb</a>
+          <a class="button" href="https://github.com/multicolor-rgb/GOR_WII_Manager"
+             data-en="View source" data-pl="Zobacz kod">View source</a>
+        </div>
+        <p class="meta"
+           data-en="GTK4 + Libadwaita · Python 3 · Ubuntu, Zorin, Fedora and other distributions"
+           data-pl="GTK4 + Libadwaita · Python 3 · Ubuntu, Zorin, Fedora i inne dystrybucje">
+          GTK4 + Libadwaita · Python 3 · Ubuntu, Zorin, Fedora and other distributions
+        </p>
+      </div>
+      <a class="hero-shot" href="screenshot-en.png">
+        <img src="screenshot-en.png" alt="GOR Wii Manager main window">
+      </a>
+    </section>
+
+    <section id="features" class="section">
+      <h2 data-en="Everything in one window" data-pl="Wszystko w jednym oknie">Everything in one window</h2>
+      <p class="section-lead"
+         data-en="From a raw WBFS partition to a folder library that USB Loader GX understands — with a single, consistent interface."
+         data-pl="Od surowej partycji WBFS po bibliotekę folderową rozumianą przez USB Loader GX — w jednym, spójnym interfejsie.">
+        From a raw WBFS partition to a folder library that USB Loader GX
+        understands — with a single, consistent interface.
+      </p>
+
+      <div class="grid">
+        <article class="card">
+          <div class="icon">◈</div>
+          <h3 data-en="WBFS drives" data-pl="Napędy WBFS">WBFS drives</h3>
+          <p data-en="Open .wbfs files, raw partitions and split .wbfs/.wbf1 sets. Format new files or devices with polkit authorization."
+             data-pl="Otwieraj pliki .wbfs, surowe partycje i zestawy .wbfs/.wbf1. Formatuj nowe pliki lub urządzenia z autoryzacją polkit.">
+            Open .wbfs files, raw partitions and split .wbfs/.wbf1 sets.
+            Format new files or devices with polkit authorization.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon">⬡</div>
+          <h3 data-en="Native RVZ import" data-pl="Natywny import RVZ">Native RVZ import</h3>
+          <p data-en="Decode Zstd, LZMA, LZMA2, BZip2 and raw RVZ groups, including Wii hash reconstruction and AES-128. No Dolphin required."
+             data-pl="Dekoduj grupy Zstd, LZMA, LZMA2, BZip2 i NONE, z odtwarzaniem hashy Wii i AES-128. Bez Dolphin.">
+            Decode Zstd, LZMA, LZMA2, BZip2 and raw RVZ groups, including Wii
+            hash reconstruction and AES-128. No Dolphin required.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon">▤</div>
+          <h3 data-en="USB library as a drive" data-pl="Biblioteka USB jak napęd">USB library as a drive</h3>
+          <p data-en="A folder with wbfs/ and games/ opens like a normal drive. Each game becomes wbfs/Title [ID]/ID.wbfs; GameCube uses Nintendont games/Title [ID]/game.iso."
+             data-pl="Folder z wbfs/ i games/ otwiera się jak zwykły napęd. Każda gra to wbfs/Tytuł [ID]/ID.wbfs, a GameCube trafia do Nintendont games/Tytuł [ID]/game.iso.">
+            A folder with wbfs/ and games/ opens like a normal drive. Each game
+            becomes wbfs/Title [ID]/ID.wbfs; GameCube uses Nintendont
+            games/Title [ID]/game.iso.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon">⇄</div>
+          <h3 data-en="Copies without bloat" data-pl="Kopiowanie bez rozdymania">Copies without bloat</h3>
+          <p data-en="Copying an already scrubbed game preserves its block map. A 368 MB game stays about 368 MB instead of expanding to the full partition."
+             data-pl="Kopiowanie wyscrubowanej gry zachowuje mapę bloków. Gra 368 MB pozostaje około 368 MB zamiast rosnąć do pełnej partycji.">
+            Copying an already scrubbed game preserves its block map. A 368 MB
+            game stays about 368 MB instead of expanding to the full partition.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon">✓</div>
+          <h3 data-en="Verify and repair" data-pl="Weryfikacja i naprawa">Verify and repair</h3>
+          <p data-en="Check WBFS consistency, detect duplicate or invalid blocks and rebuild the free-block table from the game entries."
+             data-pl="Sprawdzaj spójność WBFS, wykrywaj zdublowane lub błędne bloki i odtwarzaj tablicę wolnych bloków z wpisów gier.">
+            Check WBFS consistency, detect duplicate or invalid blocks and
+            rebuild the free-block table from the game entries.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon">◐</div>
+          <h3 data-en="Titles and covers" data-pl="Tytuły i okładki">Titles and covers</h3>
+          <p data-en="GameTDB/WiiTDB titles and covers are cached locally, so the library stays readable offline. Choose the title language in Preferences."
+             data-pl="Tytuły i okładki z GameTDB/WiiTDB są cache'owane lokalnie, więc biblioteka działa też offline. Język tytułów wybierzesz w Ustawieniach.">
+            GameTDB/WiiTDB titles and covers are cached locally, so the
+            library stays readable offline. Choose the title language in
+            Preferences.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon">≡</div>
+          <h3 data-en="Task queue" data-pl="Kolejka zadań">Task queue</h3>
+          <p data-en="Long imports, exports and copies show progress, speed, ETA and a cancel button. Work continues in the background."
+             data-pl="Długie importy, eksporty i kopiowanie pokazują postęp, prędkość, ETA i przycisk anulowania. Praca trwa w tle.">
+            Long imports, exports and copies show progress, speed, ETA and a
+            cancel button. Work continues in the background.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="icon">文</div>
+          <h3 data-en="English and Polish" data-pl="Angielski i polski">English and Polish</h3>
+          <p data-en="The interface is in English by default. Switch to Polish in Preferences → Interface language; the change applies immediately."
+             data-pl="Interfejs jest domyślnie angielski. Polski wybierzesz w Ustawienia → Język interfejsu; zmiana działa od razu.">
+            The interface is in English by default. Switch to Polish in
+            Preferences → Interface language; the change applies immediately.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="screens" class="section">
+      <h2 data-en="Screenshots" data-pl="Zrzuty ekranu">Screenshots</h2>
+      <div class="shots">
+        <figure>
+          <img src="screenshot-en.png" alt="English interface">
+          <figcaption data-en="English interface (default)" data-pl="Interfejs angielski (domyślny)">English interface (default)</figcaption>
+        </figure>
+        <figure>
+          <img src="screenshot-pl.png" alt="Polish interface">
+          <figcaption data-en="Polish interface" data-pl="Interfejs polski">Polish interface</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="install" class="section">
+      <h2 data-en="Install" data-pl="Instalacja">Install</h2>
+      <div class="install-grid">
+        <div class="install-card">
+          <h3 data-en="From the .deb package" data-pl="Z paczki .deb">From the .deb package</h3>
+          <p data-en="Download the latest package from GitHub Releases, then:"
+             data-pl="Pobierz najnowszą paczkę z GitHub Releases, a następnie:">
+            Download the latest package from GitHub Releases, then:
+          </p>
+          <pre><code>sudo apt install ./gor-wii-manager_0.6.0_all.deb</code></pre>
+          <p class="small"
+             data-en="Requires GTK 4, libadwaita, python3-gi, python3-cryptography, libzstd1, udisks2 and pkexec."
+             data-pl="Wymaga GTK 4, libadwaita, python3-gi, python3-cryptography, libzstd1, udisks2 i pkexec.">
+            Requires GTK 4, libadwaita, python3-gi, python3-cryptography,
+            libzstd1, udisks2 and pkexec.
+          </p>
+        </div>
+        <div class="install-card">
+          <h3 data-en="From source" data-pl="Ze źródeł">From source</h3>
+          <pre><code>git clone https://github.com/multicolor-rgb/GOR_WII_Manager.git
+cd GOR_WII_Manager
+make test
+PYTHONPATH=src python3 -m gor_wii_manager</code></pre>
+          <p class="small"
+             data-en="Build a package with <code>make deb</code>. The CLI is available as <code>gor-wii-manager</code> after installation."
+             data-pl="Zbuduj paczkę przez <code>make deb</code>. Po instalacji CLI jest dostępne jako <code>gor-wii-manager</code>.">
+            Build a package with <code>make deb</code>. The CLI is available as
+            <code>gor-wii-manager</code> after installation.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <img src="icon.svg" alt="" width="28" height="28">
+    <p>
+      <strong>GOR Wii Manager</strong> ·
+      <span data-en="GPL-2.0-or-later" data-pl="GPL-2.0-or-later">GPL-2.0-or-later</span> ·
+      <a href="https://github.com/multicolor-rgb/GOR_WII_Manager">GitHub</a>
+    </p>
+    <p class="small"
+       data-en="Not affiliated with Nintendo. Wii and GameCube are trademarks of Nintendo."
+       data-pl="Brak powiązań z Nintendo. Wii i GameCube są znakami towarowymi Nintendo.">
+      Not affiliated with Nintendo. Wii and GameCube are trademarks of Nintendo.
+    </p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

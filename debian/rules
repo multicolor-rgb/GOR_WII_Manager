@@ -1,0 +1,41 @@
+#!/usr/bin/make -f
+PACKAGE := gor-wii-manager
+DEST := debian/$(PACKAGE)
+PYTHON := python3
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+override_dh_auto_build:
+
+override_dh_auto_test:
+	PYTHONPATH=src $(PYTHON) -m unittest discover -s tests -q
+
+override_dh_auto_install:
+	install -d $(DEST)/usr/lib/python3/dist-packages/gor_wii_manager
+	cp -r src/gor_wii_manager/. $(DEST)/usr/lib/python3/dist-packages/gor_wii_manager/
+	find $(DEST)/usr/lib/python3/dist-packages -name '__pycache__' -type d -prune -exec rm -rf {} +
+	find $(DEST)/usr/lib/python3/dist-packages -name '*.pyc' -delete
+	install -d $(DEST)/usr/bin
+	install -m 755 debian/gor-wii-manager.sh $(DEST)/usr/bin/gor-wii-manager
+	install -m 755 debian/gor-wii-manager-helper.sh $(DEST)/usr/bin/gor-wii-manager-helper
+	ln -sf gor-wii-manager $(DEST)/usr/bin/wbfs-manager
+	install -d $(DEST)/usr/share/applications
+	install -m 644 debian/gor-wii-manager.desktop $(DEST)/usr/share/applications/
+	install -d $(DEST)/usr/share/icons/hicolor/scalable/apps
+	install -m 644 src/gor_wii_manager/ui/assets/icon.svg \
+		$(DEST)/usr/share/icons/hicolor/scalable/apps/io.github.gor.GorWiiManager.svg
+	install -d $(DEST)/usr/share/metainfo
+	install -m 644 debian/io.github.gor.GorWiiManager.metainfo.xml $(DEST)/usr/share/metainfo/
+	install -d $(DEST)/usr/lib/udev/rules.d
+	install -m 644 debian/61-gor-wii.rules $(DEST)/usr/lib/udev/rules.d/61-gor-wii.rules
+	install -d $(DEST)/usr/lib/gor-wii-manager
+	install -m 755 debian/wbfs-probe $(DEST)/usr/lib/gor-wii-manager/wbfs-probe
+	install -d $(DEST)/usr/share/polkit-1/actions
+	install -m 644 debian/io.github.gor.GorWiiManager.policy $(DEST)/usr/share/polkit-1/actions/
+	install -d $(DEST)/usr/share/doc/$(PACKAGE)
+	install -m 644 debian/copyright $(DEST)/usr/share/doc/$(PACKAGE)/copyright
+	install -m 644 README.md $(DEST)/usr/share/doc/$(PACKAGE)/README.md
+	install -m 644 LICENSE $(DEST)/usr/share/doc/$(PACKAGE)/LICENSE
+	install -m 644 docs/screenshot.png $(DEST)/usr/share/doc/$(PACKAGE)/screenshot.png
