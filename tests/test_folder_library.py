@@ -21,7 +21,7 @@ from gor_wii_manager.core.library import (
     LibraryItem,
     LibraryOptions,
 )
-from gor_wii_manager.core.wbfs import WbfsVolume
+from gor_wii_manager.core.wbfs import WbfsVolume, single_game_wbfs_size
 
 from test_core import make_gc_iso, make_wii_iso
 
@@ -166,8 +166,11 @@ class FolderLibraryTests(unittest.TestCase):
             entry = volume.games()[0]
             item = LibraryItem.from_object_source(volume.source(entry))
             estimate = item.estimated_size("auto", "remove_update")
-            expected = entry.stored_size(volume.geometry) + 2 * 1024 * 1024
+            expected = single_game_wbfs_size(volume, entry)
             self.assertEqual(estimate, expected)
+            self.assertGreaterEqual(
+                expected, entry.stored_size(volume.geometry)
+            )
             self.assertLess(estimate, 1024 * 1024 ** 2)
         finally:
             volume.close()

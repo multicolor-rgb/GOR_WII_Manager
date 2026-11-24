@@ -7,7 +7,7 @@ import os
 from .disc import build_usage
 from .util import CancelledError, WbfsError
 from .wbfs import WbfsVolume
-from .wbfs_layout import MIN_BLOCK_SIZE, WII_SECTOR
+from .wbfs_layout import MIN_BLOCK_SIZE, WII_SECTOR, size_for_used_blocks
 
 MAX_ISO_CHUNK = 4 * 1024 * 1024
 
@@ -55,7 +55,9 @@ def source_to_iso(
 def estimate_wii_wbfs_size(source, mode: str = "remove_update") -> int:
     """Upper bound for a single-game .wbfs file created from a Wii source."""
     needed, _total = _needed_blocks(source, mode)
-    return (needed + 1) * MIN_BLOCK_SIZE
+    if needed <= 0:
+        return MIN_BLOCK_SIZE
+    return size_for_used_blocks(needed, MIN_BLOCK_SIZE)
 
 
 def _needed_blocks(source, mode: str) -> tuple[int, int]:
@@ -83,7 +85,7 @@ def source_to_wbfs(
     needed, _total = _needed_blocks(source, mode)
     if needed <= 0:
         raise WbfsError("obraz nie zawiera danych do zapisania")
-    size = (needed + 1) * MIN_BLOCK_SIZE
+    size = size_for_used_blocks(needed, MIN_BLOCK_SIZE)
     volume = WbfsVolume.create(
         destination, size, block_size=MIN_BLOCK_SIZE, split=split
     )

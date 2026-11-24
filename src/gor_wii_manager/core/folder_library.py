@@ -304,12 +304,13 @@ class FolderLibrary:
         progress=None,
         cancel=None,
         replace: bool = False,
+        title: str | None = None,
     ):
         info = source.info
         existing = self.find_game(info.disc_id)
         if existing is not None and not replace:
             raise DuplicateDiscError(info.disc_id, 0, existing.title)
-        title = info.title or info.disc_id
+        title = title or info.title or info.disc_id
         item = LibraryItem.from_object_source(source, title)
         options = LibraryOptions(
             base_path=self.path,

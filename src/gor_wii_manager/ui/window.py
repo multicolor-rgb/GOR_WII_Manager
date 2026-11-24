@@ -1140,6 +1140,18 @@ class MainWindow(Adw.ApplicationWindow):
         verify_after = bool(self.settings.get("verify_after_import", False))
         volume = state.volume
         target_label = state.label
+        is_library = getattr(volume, "is_folder_library", False)
+
+        def add_source(source, title: str, job) -> None:
+            kwargs = {
+                "mode": scrub,
+                "progress": lambda done, total: job.progress(done, total),
+                "cancel": job.cancel_event,
+                "replace": replace,
+            }
+            if is_library:
+                kwargs["title"] = title
+            volume.add_disc(source, **kwargs)
 
         def runner(job):
             skipped: list[str] = []
@@ -1157,13 +1169,13 @@ class MainWindow(Adw.ApplicationWindow):
                                 if job.cancel_event.is_set():
                                     raise CancelledError("operacja anulowana")
                                 job.detail = f"{os.path.basename(path)} — {entry.disc_id}"
+                                title = (
+                                    self.titles.get(entry.disc_id)
+                                    or entry.title
+                                )
                                 try:
-                                    volume.add_disc(
-                                        source_volume.source(entry),
-                                        mode=scrub,
-                                        progress=lambda done, total: job.progress(done, total),
-                                        cancel=job.cancel_event,
-                                        replace=replace,
+                                    add_source(
+                                        source_volume.source(entry), title, job
                                     )
                                 except DuplicateDiscError as error:
                                     skipped.append(str(error))
@@ -1171,14 +1183,12 @@ class MainWindow(Adw.ApplicationWindow):
                             source_volume.close()
                     else:
                         with open_disc_source(path) as source:
+                            title = (
+                                self.titles.get(source.info.disc_id)
+                                or source.info.title
+                            )
                             try:
-                                volume.add_disc(
-                                    source,
-                                    mode=scrub,
-                                    progress=lambda done, total: job.progress(done, total),
-                                    cancel=job.cancel_event,
-                                    replace=replace,
-                                )
+                                add_source(source, title, job)
                             except DuplicateDiscError as error:
                                 skipped.append(str(error))
                 except CancelledError:

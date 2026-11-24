@@ -1,3 +1,15 @@
+gor-wii-manager (0.6.1) unstable; urgency=medium
+
+  * Naprawiono kopiowanie gier WBFS na granicy geometrii (np. Wii Sports
+    160 bloków) — plik docelowy jest teraz poprawnie zaokrąglany do
+    16 MiB, więc kopia się udaje mimo wolnego miejsca.
+  * To samo zabezpieczenie dodano dla importu RVZ/ISO do WBFS.
+  * Szacowanie miejsca używa dokładnego rozmiaru docelowego pliku.
+  * Import do biblioteki USB używa tytułu z bazy WiiTDB/GameTDB do nazwy
+    folderu (np. „Wii Sports [RSPE01]” zamiast nazwy z nagłówka płyty).
+
+ -- GOR Wii Manager <wbfs@example.invalid>  Tue, 24 Nov 2026 22:10:54 +0100
+
 gor-wii-manager (0.6.0) unstable; urgency=medium
 
   * Dwujęzyczny interfejs: angielski domyślnie, polski do wyboru w

@@ -67,7 +67,7 @@ sudo apt install python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 \
 
 ```bash
 make deb
-sudo apt install ./dist/gor-wii-manager_0.6.0_all.deb
+sudo apt install ./dist/gor-wii-manager_0.6.1_all.deb
 ```
 
 Aplikacja pojawi się w menu jako **GOR Wii Manager**, a w terminalu jako

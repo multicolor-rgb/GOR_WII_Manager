@@ -20,7 +20,11 @@ from gor_wii_manager.core.util import (
     parse_size,
     sanitize_filename,
 )
-from gor_wii_manager.core.wbfs import WbfsVolume, clone_game_to_file
+from gor_wii_manager.core.wbfs import (
+    WbfsVolume,
+    clone_game_to_file,
+    single_game_wbfs_size,
+)
 
 WII_MAGIC = 0x5D1C9EA3
 GC_MAGIC = 0xC2339F3D
@@ -77,6 +81,36 @@ def make_wii_iso(path: str, size: int = 0x800000, with_update: bool = True) -> b
     return bytes(data)
 
 
+def make_boundary_source(path: str, used: int = 8) -> None:
+    """Create a WBFS file whose block count hits the geometry boundary."""
+    volume = WbfsVolume.create(path, 64 * 1024 ** 2, block_size=2 * 1024 ** 2)
+    try:
+        header = bytearray(0x100)
+        header[0:6] = b"RTPP01"
+        header[0x18:0x1C] = be32(WII_MAGIC)
+        header[0x20:0x30] = b"Boundary Test".ljust(0x10, b"\x00")
+        wlba = [0] * volume.geometry.n_wbfs_sec_per_disc
+        for index in range(used):
+            block = volume._allocate_block()
+            volume.io.pwrite(
+                volume.geometry.block_byte_offset(block),
+                bytes([index + 1]) * 4096,
+            )
+            wlba[index] = block
+        slot = bytearray(volume.geometry.disc_info_sz)
+        slot[:0x100] = header
+        for index, value in enumerate(wlba):
+            if value:
+                slot[0x100 + index * 2:0x102 + index * 2] = int(
+                    value
+                ).to_bytes(2, "big")
+        volume.io.pwrite(volume.geometry.slot_byte_offset(0), bytes(slot))
+        volume._table_set(0, True)
+        volume.save()
+    finally:
+        volume.close()
+
+
 def make_gc_iso(path: str, size: int = 0x200000) -> bytes:
     data = bytearray(size)
     data[0:6] = b"GTEE01"
@@ -122,6 +156,18 @@ class GeometryTests(unittest.TestCase):
     def test_bad_header_rejected(self) -> None:
         with self.assertRaises(Exception):
             layout.parse_geometry(b"NOPE" + b"\x00" * 508)
+
+    def test_size_for_used_blocks_respects_geometry(self) -> None:
+        block = 2 * 1024 ** 2
+        for used in (1, 7, 8, 9, 159, 160, 161, 175):
+            size = layout.size_for_used_blocks(used, block)
+            geometry = layout.choose_geometry(size, block_size=block)
+            self.assertGreaterEqual(
+                geometry.n_wbfs_sec - 1,
+                used,
+                f"za mało bloków dla {used}",
+            )
+            self.assertEqual(size, geometry.total_bytes)
 
     def test_bitmap_bits(self) -> None:
         geometry = layout.choose_geometry(32 * 1024 ** 2)
@@ -287,10 +333,15 @@ class WbfsVolumeTests(TempDirTestCase):
         with IsoSource(iso) as source:
             entry = volume.add_disc(source, mode="remove_update")
         output = self.path("cloned.wbfs")
+        expected_size = single_game_wbfs_size(volume, entry)
         clone_game_to_file(volume, entry, output, title="Cloned")
-        self.assertEqual(
-            os.path.getsize(output),
-            (entry.blocks + 1) * volume.geometry.wbfs_sec_sz,
+        self.assertEqual(os.path.getsize(output), expected_size)
+        self.assertGreaterEqual(
+            layout.choose_geometry(
+                expected_size, block_size=volume.geometry.wbfs_sec_sz
+            ).n_wbfs_sec
+            - 1,
+            entry.blocks,
         )
         clone = WbfsVolume.open(output)
         try:
@@ -300,6 +351,30 @@ class WbfsVolumeTests(TempDirTestCase):
             self.assertEqual(games[0].title, "Cloned")
         finally:
             clone.close()
+            volume.close()
+
+    def test_clone_at_geometry_boundary(self) -> None:
+        source_path = self.path("boundary.wbfs")
+        make_boundary_source(source_path, used=8)
+        volume = WbfsVolume.open(source_path, read_only=True)
+        try:
+            entry = volume.games()[0]
+            self.assertEqual(entry.blocks, 8)
+            output = self.path("boundary-clone.wbfs")
+            clone_game_to_file(volume, entry, output, title="Boundary Test")
+            geometry = layout.choose_geometry(
+                os.path.getsize(output), block_size=2 * 1024 ** 2
+            )
+            self.assertGreaterEqual(geometry.n_wbfs_sec - 1, 8)
+            clone = WbfsVolume.open(output, read_only=True)
+            try:
+                games = clone.games()
+                self.assertEqual(games[0].disc_id, entry.disc_id)
+                self.assertEqual(games[0].blocks, 8)
+                self.assertEqual(games[0].title, "Boundary Test")
+            finally:
+                clone.close()
+        finally:
             volume.close()
 
     def test_sparse_copy_between_wbfs_volumes(self) -> None:

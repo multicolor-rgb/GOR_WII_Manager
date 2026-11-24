@@ -28,7 +28,14 @@ from .util import (
     is_fat,
     human_size,
 )
-from .wbfs import GameEntry, WbfsSource, WbfsVolume, clone_game_to_file
+from . import wbfs_layout as layout
+from .wbfs import (
+    GameEntry,
+    WbfsSource,
+    WbfsVolume,
+    clone_game_to_file,
+    single_game_wbfs_size,
+)
 
 FAT_FILESYSTEMS = {"vfat", "msdos", "fat", "fat32"}
 LIBRARY_FILESYSTEMS = {"vfat", "msdos", "fat", "fat32", "exfat", "ntfs", "ext2", "ext3", "ext4", "btrfs", "xfs"}
@@ -306,20 +313,31 @@ class LibraryItem:
         return self.info.size if self.info is not None else 0
 
     def estimated_size(self, profile: str, scrub: str) -> int:
-        if self.source_kind == "folder" and self.folder_game is not None:
-            return self.folder_game.iso_size_bytes if self.is_gc else self.folder_game.size_bytes
         if self.is_gc:
             return self.iso_size()
+        if self.source_kind == "folder" and self.folder_game is not None:
+            game = self.folder_game
+            if (
+                getattr(game, "container", "") == "wbfs"
+                and game.geometry is not None
+                and game.blocks
+            ):
+                return layout.size_for_used_blocks(
+                    game.blocks,
+                    game.geometry.wbfs_sec_sz,
+                    hd_sec_sz=game.geometry.hd_sec_sz,
+                )
+            return game.size_bytes
         if self.source_kind == "wbfs" and self.volume is not None and self.entry is not None:
-            return self.entry.stored_size(self.volume.geometry) + 2 * 1024 * 1024
+            return single_game_wbfs_size(self.volume, self.entry)
         if self.source_kind == "object":
             source = self.object_source
             if isinstance(source, WbfsSource):
-                return source.entry.stored_size(source.volume.geometry) + 2 * 1024 * 1024
+                return single_game_wbfs_size(source.volume, source.entry)
             volume = getattr(source, "wbfs_volume", None)
             entry = getattr(source, "wbfs_entry", None)
             if volume is not None and entry is not None:
-                return entry.stored_size(volume.geometry) + 2 * 1024 * 1024
+                return single_game_wbfs_size(volume, entry)
             # The source is consumed later by the exporter; do not close it here.
             return estimate_wii_wbfs_size(self.open_source(), scrub)
         source = self.open_source()

@@ -136,6 +136,35 @@ def choose_geometry(
     )
 
 
+def size_for_used_blocks(
+    used: int,
+    block_size: int,
+    hd_sec_sz: int = 512,
+) -> int:
+    """Smallest valid WBFS file size that can hold ``used`` data blocks.
+
+    WBFS geometry rounds the block count down to 16 MiB boundaries, so a file
+    sized as ``(used + 1) * block_size`` can report fewer usable blocks than
+    requested.  This helper rounds up until the geometry really has room for
+    all data blocks (block 0 is reserved for the header).
+    """
+    if used <= 0:
+        raise ValueError("liczba bloków musi być większa od zera")
+    if used >= 0xFFFF:
+        raise ValueError("zbyt wiele bloków WBFS dla 16-bitowej tablicy")
+    if block_size & (block_size - 1):
+        raise ValueError("rozmiar bloku musi być potęgą dwójki")
+    step = WII_SECTOR * hd_sec_sz
+    size = align_up((used + 1) * block_size, step)
+    while True:
+        geometry = choose_geometry(
+            size, hd_sec_sz=hd_sec_sz, block_size=block_size
+        )
+        if geometry.n_wbfs_sec - 1 >= used:
+            return geometry.total_bytes
+        size += step
+
+
 def parse_geometry(header: bytes) -> Geometry:
     if len(header) < WBFS_HEADER_FIXED or header[:4] != WBFS_MAGIC:
         raise CorruptVolumeError("to nie jest obraz WBFS (zły nagłówek)")

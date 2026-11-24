@@ -819,6 +819,21 @@ def _wbfs_source_usage(source: "WbfsSource") -> Usage:
     return Usage(table=table, total_used_bytes=sum(table) * WII_SECTOR)
 
 
+def single_game_wbfs_size(
+    source: "WbfsVolume",
+    entry: GameEntry,
+    block_size: int | None = None,
+) -> int:
+    """Minimal valid single-game WBFS size for an existing game entry."""
+    used = sum(1 for block in entry.wlba if block)
+    if not used:
+        raise WbfsError("gra nie zawiera żadnych bloków danych")
+    block_size = block_size or source.geometry.wbfs_sec_sz
+    return layout.size_for_used_blocks(
+        used, block_size, hd_sec_sz=source.geometry.hd_sec_sz
+    )
+
+
 def clone_game_to_file(
     source: "WbfsVolume",
     entry: GameEntry,
@@ -840,7 +855,7 @@ def clone_game_to_file(
     block_size = source.geometry.wbfs_sec_sz
     target = WbfsVolume.create(
         destination,
-        (len(used) + 1) * block_size,
+        single_game_wbfs_size(source, entry, block_size),
         block_size=block_size,
         split=split,
     )
