@@ -91,6 +91,7 @@ class MainWindow(Adw.ApplicationWindow):
         self._scanned_folders = False
         self._preferences: dialogs.PreferencesWindow | None = None
         self._properties: dialogs.PropertiesWindow | None = None
+        self._context_popover: Gtk.PopoverMenu | None = None
         self._load_pool = threading.Thread
         self.art = ArtLoader(
             os.path.join(cache_dir(), "covers"),
@@ -232,6 +233,13 @@ class MainWindow(Adw.ApplicationWindow):
         menu.append(_("Dodaj gry z folderu…"), "win.add-folder")
         menu.append(_("Wypakuj jako WBFS…"), "win.extract-wbfs")
         menu.append(_("Zamknij napęd"), "win.close-volume")
+
+        edit = Gio.Menu()
+        edit.append(_("Właściwości"), "win.properties")
+        edit.append(_("Wypakuj zaznaczone…"), "win.extract")
+        edit.append(_("Kopiuj zaznaczone…"), "win.copy")
+        edit.append(_("Usuń zaznaczone"), "win.delete")
+        menu.append_section(None, edit)
 
         conversion = Gio.Menu()
         conversion.append(_("Konwertuj RVZ/ISO do ISO…"), "win.convert-iso")
@@ -464,7 +472,7 @@ class MainWindow(Adw.ApplicationWindow):
         self.column_view.connect("activate", self._on_row_activated)
 
         title_factory = Gtk.SignalListItemFactory()
-        setup_title_cell(title_factory)
+        setup_title_cell(title_factory, self._on_cell_right_click)
         bind_title_cell(
             title_factory,
             self.art,
@@ -508,7 +516,12 @@ class MainWindow(Adw.ApplicationWindow):
         casefold: bool = False,
     ) -> Gtk.ColumnViewColumn:
         factory = Gtk.SignalListItemFactory()
-        setup_text_cell(factory, attribute, dim=dim)
+        setup_text_cell(
+            factory,
+            attribute,
+            dim=dim,
+            on_right_click=self._on_cell_right_click,
+        )
         bind_text_cell(factory, attribute)
         column = Gtk.ColumnViewColumn.new(title, factory)
         column.set_fixed_width(width)
@@ -571,6 +584,37 @@ class MainWindow(Adw.ApplicationWindow):
         item = self.sort_model.get_item(position)
         if item is not None:
             self._show_properties(item)
+
+    def _on_cell_right_click(self, cell, widget, x: float, y: float) -> None:
+        position = cell.get_position()
+        if position < 0:
+            return
+        if not self.selection_model.is_selected(position):
+            self.selection_model.select_item(position, True)
+
+        menu = Gio.Menu()
+        menu.append(_("Właściwości"), "win.properties")
+        menu.append(_("Wypakuj zaznaczone…"), "win.extract")
+        menu.append(_("Kopiuj zaznaczone…"), "win.copy")
+        menu.append(_("Usuń zaznaczone"), "win.delete")
+        popover = Gtk.PopoverMenu.new_from_model(menu)
+        popover.set_has_arrow(False)
+        popover.set_parent(widget)
+        rect = Gdk.Rectangle()
+        rect.x = int(x)
+        rect.y = int(y)
+        rect.width = 1
+        rect.height = 1
+        popover.set_pointing_to(rect)
+        self._context_popover = popover
+
+        def closed(menu_popover) -> None:
+            menu_popover.unparent()
+            if self._context_popover is menu_popover:
+                self._context_popover = None
+
+        popover.connect("closed", closed)
+        popover.popup()
 
     def _on_close_request(self, *_args) -> bool:
         self.settings.set("window_width", self.get_width())

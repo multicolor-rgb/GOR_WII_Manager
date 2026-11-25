@@ -67,7 +67,7 @@ sudo apt install python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 \
 
 ```bash
 make deb
-sudo apt install ./dist/gor-wii-manager_0.6.1_all.deb
+sudo apt install ./dist/gor-wii-manager_0.6.2_all.deb
 ```
 
 Aplikacja pojawi się w menu jako **GOR Wii Manager**, a w terminalu jako
@@ -151,6 +151,9 @@ PYTHONPATH=src python3 -m gor_wii_manager --open /media/dysk/gry.wbfs
 3. **+** (lub `Ctrl+N`) dodaje obrazy gier (także `.rvz`); menu zawiera też
    dodawanie całych folderów i konwersję RVZ/ISO do ISO lub `.wbfs`.
 4. Zaznacz gry i użyj przycisków u góry: **Wypakuj**, **Kopiuj**, **Usuń**.
+   Usuwanie jest też dostępne w menu **☰** i w menu kontekstowym po kliknięciu
+   prawym przyciskiem myszy na grze. Operacja jest trwała i wymaga
+   potwierdzenia.
 5. Dwuklik na grze otwiera właściwości (partycje, rozmiary, okładka, zmiana
    nazwy).
 

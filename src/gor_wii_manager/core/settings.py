@@ -8,7 +8,7 @@ import shutil
 
 APP_ID = "io.github.gor.GorWiiManager"
 APP_NAME = "GOR Wii Manager"
-APP_VERSION = "0.6.1"
+APP_VERSION = "0.6.2"
 
 APP_DIR_NAME = "gor-wii-manager"
 LEGACY_DIR_NAME = "wbfs-manager"

@@ -122,7 +122,10 @@ def _ellipsize(label: Gtk.Label) -> None:
     label.set_xalign(0.0)
 
 
-def setup_title_cell(factory: Gtk.SignalListItemFactory) -> None:
+def setup_title_cell(
+    factory: Gtk.SignalListItemFactory,
+    on_right_click=None,
+) -> None:
     def setup(_factory, list_item):
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
         box.set_margin_top(6)
@@ -148,6 +151,16 @@ def setup_title_cell(factory: Gtk.SignalListItemFactory) -> None:
         list_item.image = image
         list_item.title_label = title
         list_item.subtitle_label = subtitle
+        if on_right_click is not None:
+            gesture = Gtk.GestureClick.new()
+            gesture.set_button(3)
+            gesture.connect(
+                "pressed",
+                lambda _gesture, _n, x, y, cell=list_item, widget=box: (
+                    on_right_click(cell, widget, x, y)
+                ),
+            )
+            box.add_controller(gesture)
 
     factory.connect("setup", setup)
 
@@ -173,7 +186,12 @@ def bind_title_cell(factory: Gtk.SignalListItemFactory, art_loader: ArtLoader, s
     factory.connect("bind", bind)
 
 
-def setup_text_cell(factory: Gtk.SignalListItemFactory, attribute: str, dim: bool = False) -> None:
+def setup_text_cell(
+    factory: Gtk.SignalListItemFactory,
+    attribute: str,
+    dim: bool = False,
+    on_right_click=None,
+) -> None:
     def setup(_factory, list_item):
         label = Gtk.Label(xalign=0.0)
         label.set_margin_start(6)
@@ -182,6 +200,16 @@ def setup_text_cell(factory: Gtk.SignalListItemFactory, attribute: str, dim: boo
             label.add_css_class("dim-label")
         list_item.set_child(label)
         list_item.label = label
+        if on_right_click is not None:
+            gesture = Gtk.GestureClick.new()
+            gesture.set_button(3)
+            gesture.connect(
+                "pressed",
+                lambda _gesture, _n, x, y, cell=list_item, widget=label: (
+                    on_right_click(cell, widget, x, y)
+                ),
+            )
+            label.add_controller(gesture)
 
     factory.connect("setup", setup)
 

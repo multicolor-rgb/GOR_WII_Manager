@@ -1,3 +1,12 @@
+gor-wii-manager (0.6.2) unstable; urgency=medium
+
+  * Dodano wyraźne usuwanie gier: pozycja w menu głównym i menu
+    kontekstowe po kliknięciu prawym przyciskiem na liście.
+  * Usuwanie działa również dla bibliotek USB (folderów wbfs/ i games/).
+  * Potwierdzenie usunięcia pokazuje tytuły i liczbę gier.
+
+ -- GOR Wii Manager <wbfs@example.invalid>  Wed, 25 Nov 2026 17:17:45 +0100
+
 gor-wii-manager (0.6.1) unstable; urgency=medium
 
   * Naprawiono kopiowanie gier WBFS na granicy geometrii (np. Wii Sports
